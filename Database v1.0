@@ -1,0 +1,133 @@
+#Computer Database
+#Programmer: Alex Hetlinger
+#Attempting to learn about creating/storing information that would be stored in a database
+class Computer(object):
+    def __init__(self, name = 'none', serial = 11111, location = 'none'):
+        self.__name = name
+        self.__serial = serial
+        self.__location = location
+    def getName(self):
+        return self.__name
+    def setName(self, name):
+        self.__name = name
+    CompName = property(getName, setName)
+
+    def getSerial(self):
+        return self.__serial
+    def setSerial(self, serial):
+        self.__serial = serial
+    CompSerial = property(getSerial, setSerial)
+
+    def getLocation(self):
+        return self.__location
+    def setLocation(self, location):
+        self.__location = location
+    CompLocation = property(getLocation, setLocation)
+
+    def getModel(self):
+        return self.__model
+    def setModel(self, model):
+        self.__model = model
+    CompModel = property(getModel, setModel)
+
+#Colors
+import sys
+shell = sys.stdout.shell
+#Time for Debug Log
+import datetime
+    
+Num = 0
+CompSerials = {}
+CompNames = {}
+CompList = {}
+doanother = 'y'
+shell.write("\n"+" "*31+"W"),shell.write("e","DEFINITION")\
+                       ,shell.write("l","STRING")\
+    ,shell.write("c","KEYWORD"),shell.write("o","COMMENT"),shell.write("m")\
+    ,shell.write("e","DEFINITION"),shell.write(" t","STRING")\
+    ,shell.write("o","KEYWORD"),shell.write("\n"+" "*25+"T","COMMENT")\
+    ,shell.write('H'),shell.write('E',"DEFINITION"),shell.write(" C","STRING")\
+    ,shell.write('O',"KEYWORD"),shell.write('M',"COMMENT"),shell.write('P')\
+    ,shell.write('U',"DEFINITION"),shell.write('T','STRING')\
+    ,shell.write('E','KEYWORD'),shell.write('R','COMMENT'),shell.write(" D")\
+    ,shell.write('A','DEFINITION'),shell.write("T",'STRING')\
+    ,shell.write('A','KEYWORD'),shell.write('B','COMMENT'),shell.write('A')\
+    ,shell.write('S','DEFINITION'),shell.write('E','STRING')
+while doanother == 'y':
+    try:
+        print "\n"
+        shell.write("Type","DEFINITION"),shell.write(" 'add'","COMMENT"),\
+              shell.write(" to add a new computer to the database","DEFINITION")
+        print ""
+        shell.write("Type","DEFINITION"),shell.write(" 'find'","COMMENT"),\
+              shell.write(" to lookup a computer in the database","DEFINITION")
+        print "\n"
+        Decision = raw_input('What would you like to do? ' ).lower()
+        if Decision == 'add':
+            Num = Num + 1
+            NewComp = Computer()
+            NewComp.CompName = raw_input("Please enter the computer name: ")
+            NewComp.CompSerial = input("Please enter the serial number: ")
+            NewComp.CompModel = raw_input("Please enter the model: ")
+            NewComp.CompLocation = raw_input("Please enter the location: ")        
+            NewCompInfo = [NewComp.CompName, NewComp.CompSerial,\
+                           NewComp.CompLocation]
+            CompList['Comp'+str(Num)]=NewCompInfo
+
+            
+            f = open('Database.txt','w')
+            f.write(str(CompList))
+            f.close()
+            print CompList
+
+            
+            CompNames[NewComp.CompName] =\
+                                        [NewComp.CompSerial, NewComp.CompModel,\
+                                         NewComp.CompLocation]
+            CompSerials[NewComp.CompSerial] =\
+                                            [NewComp.CompName, NewComp.CompModel,\
+                                             NewComp.CompLocation]
+        if Decision == 'find':
+            print ""
+            print "How would you like to find the computer?"
+            shell.write("Type ", "DEFINITION"), shell.write("'name' ", "COMMENT")\
+                ,shell.write("or ", "DEFINITION")\
+                ,shell.write("'serial'","COMMENT")            
+            try:
+                Finder = raw_input("\n"+"Choose: ").lower()
+                if Finder == 'name':
+                    NameLookup = raw_input('What is the computer name? ')
+                    if NameLookup in CompNames:
+                        print "Here is the info for computer: ",\
+                              NameLookup,"\n",CompNames[NameLookup]
+                    else:
+                        shell.write("Sorry, not a valid name.","COMMENT")
+                if Finder == 'serial':
+                    SerialLookup = input('What is the serial number? ')
+                    if SerialLookup in CompSerials:
+                        print "Here is the info for computer: ",\
+                              SerialLookup,"\n",CompSerials[SerialLookup]
+                    else:
+                        shell.write("Sorry, not a valid serial number.","COMMENT")
+            except Exception, e:
+                print "Not a valid name or serial number.", e
+                f = open('ErrorLog.txt','w')
+                f.write(str(datetime.datetime.now()))
+                f.write('\n')
+                f.write('User Error: ')
+                f.write(str(e))
+                f.write('\n')
+                f.close()
+        if Decision != 'find' and Decision != 'add':
+            print "Sorry, not a valid choice."
+            print "Please type 'add' or 'find' only."
+    except Exception, e:
+                print "Something went wrong", e
+                f = open('ErrorLog.txt','w')
+                f.write(str(datetime.datetime.now()))
+                f.write('\n')
+                f.write('User Error: ')
+                f.write(str(e))
+                f.write('\n')
+                f.close()
+    doanother = raw_input("\n"+'Would you like to do something else? (y/n) ')
